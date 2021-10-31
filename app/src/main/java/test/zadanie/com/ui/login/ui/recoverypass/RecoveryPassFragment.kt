@@ -19,8 +19,6 @@ class RecoveryPassFragment : Fragment() {
         fun newInstance() = RecoveryPassFragment()
     }
 
-    private lateinit var viewModel: RecoveryPassViewModel
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -30,7 +28,6 @@ class RecoveryPassFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(RecoveryPassViewModel::class.java)
 
         var reg: Button = view?.findViewById(R.id.recBtn)!!
         reg.setOnClickListener(View.OnClickListener {

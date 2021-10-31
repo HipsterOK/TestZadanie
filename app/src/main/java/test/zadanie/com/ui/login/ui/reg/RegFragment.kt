@@ -19,8 +19,6 @@ class RegFragment : Fragment() {
         fun newInstance() = RegFragment()
     }
 
-    private lateinit var viewModel: RegViewModel
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -30,7 +28,6 @@ class RegFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(RegViewModel::class.java)
 
         var reg: Button = view?.findViewById(R.id.regBtn)!!
         reg.setOnClickListener(View.OnClickListener {
