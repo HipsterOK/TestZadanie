@@ -8,6 +8,18 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.github.kittinunf.fuel.httpGet
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.json.JSONObject
+import org.json.JSONTokener
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.net.URL
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class SplashScreenActivity : AppCompatActivity() {
@@ -20,33 +32,42 @@ class SplashScreenActivity : AppCompatActivity() {
 
         val pref = Prefs(applicationContext)
         val gson = Gson()
-        val main = Func()
+        val func = Func()
 
         Handler().postDelayed({
 
-            if (main.checkForInternet(this)) {
+            if (func.checkForInternet(this)) {
 
+                Log.i("fRun", pref.getBoolean("FirstRun").toString())
                 if (pref.getBoolean("firstRun")) {
-                    "https://sporter1.ru/aka.php?id=2gy3oyj4vsvzmo484hxp".httpGet().responseString()
-                    { _, _, result ->
-                        val info:Info=gson.fromJson(result.toString(), Info::class.java)
-                        Log.i("APIResponse", info.url.toString())
-                        pref.setString("URL", info.url.toString())
-                    }
+                    Thread {
+                        val result = func.doRequest()
+                        val result1=result.component1()
+                        Log.i("Result", result1.toString())
+                        val jsonObject = JSONTokener(result1.toString()).nextValue() as JSONObject
+                        val url = jsonObject.getString("url")
+                        Log.i("Url: ", url)
+                        pref.setString("URL", url)
+                        pref.setString("ActiveURL", url)
+                    }.start()
+
                     pref.setBoolean("firstRun", false)
                 }
 
-                if(pref.getString("URL") != "null"){
+                Log.i("Url", pref.getString("URL"))
+                Log.i("ActiveUrl", pref.getString("URL"))
+
+
+                if (pref.getString("URL") != "null") {
                     startActivity(Intent(this, URLActivity::class.java))
                     finish()
-                }
-                else{
+                } else {
                     startActivity(Intent(this, NoURLActivity::class.java))
                     finish()
                 }
 
             } else {
-                main.onAlertDialog(View(this))
+                func.onAlertDialog(View(this))
             }
 
         }, SPLASH_TIME_OUT)

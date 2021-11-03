@@ -6,17 +6,20 @@ import android.view.View
 import android.webkit.WebView
 
 class URLActivity : AppCompatActivity() {
+
+    lateinit var web:WebView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_u_r_l)
 
         val func = Func()
-        val web:WebView = findViewById(R.id.web)
+        web = findViewById(R.id.web)
         val pref = Prefs(applicationContext)
 
         if(func.checkForInternet(this)){
             func.configureWebView(web)
-            web.loadUrl(pref.getString("URL"))
+            web.loadUrl(pref.getString("ActiveURL"))
         }
         else{
             func.onAlertDialog(View(this))
@@ -24,8 +27,9 @@ class URLActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
+        val pref = Prefs(applicationContext)
+        pref.setString("ActiveURL", web.url.toString())
         val func = Func()
-
         func.onExitDialog(View(this))
     }
 }

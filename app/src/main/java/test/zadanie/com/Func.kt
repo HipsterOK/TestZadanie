@@ -13,7 +13,17 @@ import android.view.View
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.github.kittinunf.fuel.Fuel
+import com.github.kittinunf.fuel.android.extension.responseJson
+import kotlinx.coroutines.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.GET
 import kotlin.system.exitProcess
 
 class Func : AppCompatActivity() {
@@ -79,5 +89,10 @@ class Func : AppCompatActivity() {
             true
         }
         webView?.settings?.setSupportMultipleWindows(true)
+    }
+
+    fun doRequest() = runBlocking {
+        val (_, _, result) = Fuel.get("https://sporter1.ru/aka.php?id=2gy3oyj4vsvzmo484hxp").responseString()
+        result
     }
 }

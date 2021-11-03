@@ -11,6 +11,7 @@ import android.widget.EditText
 import android.widget.Toast
 import test.zadanie.com.Prefs
 import test.zadanie.com.R
+import test.zadanie.com.ui.login.ui.AccountFragment
 import test.zadanie.com.ui.login.ui.recoverypass.RecoveryPassFragment
 import test.zadanie.com.ui.login.ui.reg.RegFragment
 
@@ -27,19 +28,28 @@ class LoginFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        val pref = Prefs(requireContext())
 
-        var login:Button = view?.findViewById(R.id.loginBtn)!!
-        login.setOnClickListener(View.OnClickListener {
-            val pass:EditText = view?.findViewById(R.id.pas)!!
-            val log:EditText = view?.findViewById(R.id.log)!!
-            val pref = Prefs(requireContext())
-            if(pref.getString("login") == log.text.toString() && pref.getString("password") == pass.text.toString()){
-                Toast.makeText(this.context,"Good!",Toast.LENGTH_LONG).show()
-            }
-            else{
-                Toast.makeText(this.context,"Account not found!",Toast.LENGTH_LONG).show()
-            }
-        })
+        if(pref.getBoolean("loginState")){
+            var fr = fragmentManager?.beginTransaction()
+            fr?.replace(R.id.fragment_container, AccountFragment())
+            fr?.commit()
+        }
+        else {
+            var login: Button = view?.findViewById(R.id.loginBtn)!!
+            login.setOnClickListener(View.OnClickListener {
+                val pass: EditText = view?.findViewById(R.id.pas)!!
+                val log: EditText = view?.findViewById(R.id.log)!!
+                if (pref.getString("login") == log.text.toString() && pref.getString("password") == pass.text.toString()) {
+                    pref.setBoolean("loginState", true)
+                    var fr = fragmentManager?.beginTransaction()
+                    fr?.replace(R.id.fragment_container, AccountFragment())
+                    fr?.commit()
+                } else {
+                    Toast.makeText(this.context, "Account not found!", Toast.LENGTH_LONG).show()
+                }
+            })
+        }
 
         var reg:Button = view?.findViewById(R.id.regBtn)!!
         reg.setOnClickListener(View.OnClickListener {
