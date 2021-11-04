@@ -2,6 +2,7 @@ package test.zadanie.com
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import test.zadanie.com.ui.login.LoginFragment
 
@@ -19,6 +20,7 @@ class NoURLActivity : AppCompatActivity() {
             transaction.replace(R.id.fragment_container,textFragment)
             transaction.addToBackStack(null)
             transaction.commit()
+            Log.i("LoginState", Prefs(applicationContext).getBoolean("LoginState").toString())
         }
         else{
            func.onAlertDialog(View(this))

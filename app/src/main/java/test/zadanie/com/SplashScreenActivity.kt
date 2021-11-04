@@ -11,6 +11,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.NonCancellable.join
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
@@ -34,13 +35,14 @@ class SplashScreenActivity : AppCompatActivity() {
         val gson = Gson()
         val func = Func()
 
-        Handler().postDelayed({
 
+        Handler().postDelayed({
+            Thread {
             if (func.checkForInternet(this)) {
 
                 Log.i("fRun", pref.getBoolean("FirstRun").toString())
                 if (pref.getBoolean("firstRun")) {
-                    Thread {
+
                         val result = func.doRequest()
                         val result1=result.component1()
                         Log.i("Result", result1.toString())
@@ -49,7 +51,8 @@ class SplashScreenActivity : AppCompatActivity() {
                         Log.i("Url: ", url)
                         pref.setString("URL", url)
                         pref.setString("ActiveURL", url)
-                    }.start()
+                        pref.setBoolean("LoginState", false)
+
 
                     pref.setBoolean("firstRun", false)
                 }
@@ -69,7 +72,8 @@ class SplashScreenActivity : AppCompatActivity() {
             } else {
                 func.onAlertDialog(View(this))
             }
-
+            }.start()
         }, SPLASH_TIME_OUT)
+
     }
 }
