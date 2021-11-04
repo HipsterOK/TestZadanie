@@ -41,6 +41,7 @@ class SplashScreenActivity : AppCompatActivity() {
             if (func.checkForInternet(this)) {
 
                 AppMetrica()
+                OneSignal()
 
                 Log.i("fRun", pref.getBoolean("FirstRun").toString())
                 if (pref.getBoolean("firstRun")) {
