@@ -40,14 +40,15 @@ class SplashScreenActivity : AppCompatActivity() {
         Handler().postDelayed({
             run {
 
-                managePermissions = ManagePermissions(this, list, PermissionsRequestCode)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    managePermissions.checkPermissions()
-                }
                 if (func.checkForInternet(this)) {
 
                     Log.i("fRun", pref.getBoolean("FirstRun").toString())
                     if (pref.getBoolean("firstRun")) {
+
+                        managePermissions = ManagePermissions(this, list, PermissionsRequestCode)
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            managePermissions.checkPermissions()
+                        }
 
                         try {
                             val result = func.doRequest()

@@ -19,7 +19,7 @@ class NoURLActivity : AppCompatActivity() {
             transaction.replace(R.id.fragment_container,LoginFragment())
             transaction.addToBackStack(null)
             transaction.commit()
-            Log.i("LoginState", Prefs(applicationContext).getBoolean("LoginState").toString())
+            Log.i("LoginState", Prefs(applicationContext).getBoolean("loginState").toString())
         }
         else{
            func.onAlertDialog(View(this))

@@ -15,10 +15,6 @@ import test.zadanie.com.ui.login.LoginFragment
 
 class RegFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = RegFragment()
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
