@@ -1,12 +1,15 @@
 package test.zadanie.com
 
+import android.Manifest
 import android.app.AlertDialog
 import android.content.Context
+import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.github.kittinunf.fuel.Fuel
 import kotlinx.coroutines.runBlocking
 import kotlin.system.exitProcess
@@ -67,4 +70,10 @@ class Func : AppCompatActivity() {
         result
     }
 
+    fun checkPermission(context: Context): Boolean {
+        val writePerm = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        val intPerm = ContextCompat.checkSelfPermission(context, Manifest.permission.INTERNET)
+        val accesPerm = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_NETWORK_STATE)
+        return writePerm == PackageManager.PERMISSION_GRANTED && intPerm == PackageManager.PERMISSION_GRANTED && accesPerm == PackageManager.PERMISSION_GRANTED
+    }
 }
