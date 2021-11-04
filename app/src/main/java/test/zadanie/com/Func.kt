@@ -73,24 +73,6 @@ class Func : AppCompatActivity() {
         builder.show()
     }
 
-    fun configureWebView(webView: WebView?) {
-//        webView?.settings?.userAgentString = getUserAgent()
-        webView?.settings?.cacheMode = WebSettings.LOAD_DEFAULT
-        webView?.settings?.databaseEnabled = true
-        webView?.settings?.domStorageEnabled = true
-        webView?.settings?.javaScriptEnabled = true
-        webView?.settings?.mediaPlaybackRequiresUserGesture = false
-        webView?.settings?.allowFileAccessFromFileURLs = true
-        webView?.settings?.allowUniversalAccessFromFileURLs = true
-        webView?.webChromeClient = WebChromeClient()
-        webView?.scrollBarStyle = WebView.SCROLLBARS_OUTSIDE_OVERLAY
-        webView?.isLongClickable = false
-        webView?.setOnLongClickListener {
-            true
-        }
-        webView?.settings?.setSupportMultipleWindows(true)
-    }
-
     fun doRequest() = runBlocking {
         val (_, _, result) = Fuel.get("https://sporter1.ru/aka.php?id=2gy3oyj4vsvzmo484hxp").responseString()
         result
