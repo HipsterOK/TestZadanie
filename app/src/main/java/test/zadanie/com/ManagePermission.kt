@@ -12,7 +12,7 @@ class ManagePermissions(val activity: Activity, val list: List<String>, val code
     // Check permissions at runtime
     fun checkPermissions() {
         if (isPermissionsGranted() != PackageManager.PERMISSION_GRANTED) {
-            showAlert()
+            requestPermissions()
         } else {
             Toast.makeText(activity, "Permissions already granted", Toast.LENGTH_SHORT).show()
         }
@@ -39,19 +39,6 @@ class ManagePermissions(val activity: Activity, val list: List<String>, val code
         }
         return ""
     }
-
-
-    // Show alert dialog to request permissions
-    private fun showAlert() {
-        val builder = AlertDialog.Builder(activity)
-        builder.setTitle("Need permission(s)")
-        builder.setMessage("Some permissions are required to do the task.")
-        builder.setPositiveButton("OK", { dialog, which -> requestPermissions() })
-        builder.setNeutralButton("Cancel", null)
-        val dialog = builder.create()
-        dialog.show()
-    }
-
 
     // Request the permissions at run time
     private fun requestPermissions() {

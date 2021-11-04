@@ -14,10 +14,9 @@ class NoURLActivity : AppCompatActivity() {
         val func = Func()
 
         if(func.checkForInternet(this)){
-            val textFragment = LoginFragment()
             val manager = supportFragmentManager
             val transaction = manager.beginTransaction()
-            transaction.replace(R.id.fragment_container,textFragment)
+            transaction.replace(R.id.fragment_container,LoginFragment())
             transaction.addToBackStack(null)
             transaction.commit()
             Log.i("LoginState", Prefs(applicationContext).getBoolean("LoginState").toString())

@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -18,46 +19,52 @@ class SplashScreenActivity : AppCompatActivity() {
     private lateinit var managePermissions: ManagePermissions
 
     val list = listOf<String>(
-    Manifest.permission.INTERNET,
-    Manifest.permission.ACCESS_NETWORK_STATE,
-    Manifest.permission.READ_EXTERNAL_STORAGE
+        Manifest.permission.INTERNET,
+        Manifest.permission.ACCESS_NETWORK_STATE,
+        Manifest.permission.READ_EXTERNAL_STORAGE
     )
 
-    private val SPLASH_TIME_OUT:Long = 3000 // 1 sec
+    private val SPLASH_TIME_OUT:Long = 3000// 1 sec
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
 
+
+
         val pref = Prefs(applicationContext)
         val func = Func()
-
-        managePermissions = ManagePermissions(this,list,PermissionsRequestCode)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            managePermissions.checkPermissions()
-         }
 
         AppMetrica()
         OneSignal()
 
         Handler().postDelayed({
-            Thread {
+            run {
+
+                managePermissions = ManagePermissions(this, list, PermissionsRequestCode)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    managePermissions.checkPermissions()
+                }
                 if (func.checkForInternet(this)) {
 
                     Log.i("fRun", pref.getBoolean("FirstRun").toString())
                     if (pref.getBoolean("firstRun")) {
 
-                        val result = func.doRequest()
-                        val result1 = result.component1()
-                        Log.i("Result", result1.toString())
-                        val jsonObject = JSONTokener(result1.toString()).nextValue() as JSONObject
-                        val url = jsonObject.getString("url")
-                        Log.i("Url: ", url)
-                        pref.setString("URL", url)
-                        pref.setString("ActiveURL", url)
-                        pref.setBoolean("LoginState", false)
-
-
-                        pref.setBoolean("firstRun", false)
+                        try {
+                            val result = func.doRequest()
+                            Log.i("Result", result.toString())
+                            val result1 = result.component1()
+                            Log.i("Result", result1.toString())
+                            val jsonObject =
+                                JSONTokener(result1.toString()).nextValue() as JSONObject
+                            val url = jsonObject.getString("url")
+                            Log.i("Url: ", url)
+                            pref.setString("URL", url)
+                            pref.setString("ActiveURL", url)
+                            pref.setBoolean("firstRun", false)
+                        } catch (e: Exception) {
+                            Log.i("InterEx", e.toString())
+                        }
+                        pref.setBoolean("loginState", false)
                     }
 
                     Log.i("Url", pref.getString("URL"))
@@ -75,8 +82,7 @@ class SplashScreenActivity : AppCompatActivity() {
                 } else {
                     func.onAlertDialog(View(this))
                 }
-            }.start()
-        }, SPLASH_TIME_OUT)
-
+            }
+                                         }, SPLASH_TIME_OUT)
     }
 }
