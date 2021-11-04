@@ -1,19 +1,15 @@
 package test.zadanie.com
 
-import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.google.gson.Gson
 import org.json.JSONObject
 import org.json.JSONTokener
-import java.util.*
-import android.Manifest;
 
 
 class SplashScreenActivity : AppCompatActivity() {
@@ -33,7 +29,6 @@ class SplashScreenActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash_screen)
 
         val pref = Prefs(applicationContext)
-        val gson = Gson()
         val func = Func()
 
         managePermissions = ManagePermissions(this,list,PermissionsRequestCode)

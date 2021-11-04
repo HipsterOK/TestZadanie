@@ -2,27 +2,17 @@ package test.zadanie.com
 
 import android.app.AlertDialog
 import android.content.Context
-import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import com.github.kittinunf.fuel.Fuel
-import kotlinx.coroutines.*
+import kotlinx.coroutines.runBlocking
 import kotlin.system.exitProcess
 
 
 class Func : AppCompatActivity() {
-
-    companion object {
-        private const val INTERNET_PERMISSION_CODE = 100
-        private const val ACCESS_NETWORK_STATE_PERMISSION_CODE = 101
-        private const val WRITE_EXTERNAL_STORAGE_PERMISSION_CODE=102
-    }
 
     fun checkForInternet(context: Context): Boolean {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -49,7 +39,7 @@ class Func : AppCompatActivity() {
         builder.setPositiveButton(
             "OK"
         ) { _, _ ->
-            exitProcess(0);
+            exitProcess(0)
         }
 
         builder.show()
