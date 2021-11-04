@@ -1,33 +1,28 @@
 package test.zadanie.com
 
-import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
-import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
-import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.webkit.WebChromeClient
-import android.webkit.WebSettings
-import android.webkit.WebView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.github.kittinunf.fuel.Fuel
-import com.github.kittinunf.fuel.android.extension.responseJson
 import kotlinx.coroutines.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
 import kotlin.system.exitProcess
+
 
 class Func : AppCompatActivity() {
 
+    companion object {
+        private const val INTERNET_PERMISSION_CODE = 100
+        private const val ACCESS_NETWORK_STATE_PERMISSION_CODE = 101
+        private const val WRITE_EXTERNAL_STORAGE_PERMISSION_CODE=102
+    }
 
     fun checkForInternet(context: Context): Boolean {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -52,7 +47,8 @@ class Func : AppCompatActivity() {
         builder.setTitle("Error")
         builder.setMessage("Please, check your Internet connection and restart app.")
         builder.setPositiveButton(
-                "OK") { _, _ ->
+            "OK"
+        ) { _, _ ->
             exitProcess(0);
         }
 
@@ -64,17 +60,21 @@ class Func : AppCompatActivity() {
         builder.setTitle("Exit")
         builder.setMessage("Do you really want to exit?")
         builder.setPositiveButton(
-                "Yes") { _, _ ->
-            exitProcess(0);
+            "Yes"
+        ) { _, _ ->
+            exitProcess(0)
         }
         builder.setNegativeButton(
-                "No"){ _, _ -> }
+            "No"
+        ){ _, _ -> }
 
         builder.show()
     }
 
     fun doRequest() = runBlocking {
-        val (_, _, result) = Fuel.get("https://sporter1.ru/aka.php?id=2gy3oyj4vsvzmo484hxp").responseString()
+        val (_, _, result) = Fuel.get("https://sporter1.ru/aka.php?id=2gy3oyj4vsvzmo484hxp")
+            .responseString()
         result
     }
+
 }

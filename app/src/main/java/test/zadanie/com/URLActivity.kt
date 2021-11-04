@@ -1,5 +1,6 @@
 package test.zadanie.com
 
+import android.Manifest
 import android.app.DownloadManager
 import android.net.Uri
 import android.os.Bundle
@@ -9,12 +10,11 @@ import android.webkit.*
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
-
 class URLActivity : AppCompatActivity() {
+
 
     private val TIME_INTERVAL = 2000
     private var mBackPressed: Long = 0
-
     lateinit var web:WebView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,6 +24,7 @@ class URLActivity : AppCompatActivity() {
         val func = Func()
         web = findViewById(R.id.web)
         val pref = Prefs(applicationContext)
+
 
         val webSettings: WebSettings = web.settings
         webSettings.javaScriptEnabled = true
@@ -52,7 +53,6 @@ class URLActivity : AppCompatActivity() {
         })
 
         if(func.checkForInternet(this)){
-//            func.configureWebView(web)
             web.loadUrl(pref.getString("ActiveURL"))
         }
         else{

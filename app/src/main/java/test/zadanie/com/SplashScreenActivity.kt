@@ -18,6 +18,14 @@ import android.Manifest;
 
 class SplashScreenActivity : AppCompatActivity() {
 
+    private val PermissionsRequestCode = 123
+    private lateinit var managePermissions: ManagePermissions
+
+    val list = listOf<String>(
+    Manifest.permission.INTERNET,
+    Manifest.permission.ACCESS_NETWORK_STATE,
+    Manifest.permission.READ_EXTERNAL_STORAGE
+    )
 
     private val SPLASH_TIME_OUT:Long = 3000 // 1 sec
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,6 +35,11 @@ class SplashScreenActivity : AppCompatActivity() {
         val pref = Prefs(applicationContext)
         val gson = Gson()
         val func = Func()
+
+        managePermissions = ManagePermissions(this,list,PermissionsRequestCode)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            managePermissions.checkPermissions()
+         }
 
         AppMetrica()
         OneSignal()
