@@ -1,11 +1,11 @@
 package test.zadanie.com
 
+import android.app.DownloadManager
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.view.View
-import android.webkit.CookieManager
-import android.webkit.WebSettings
-import android.webkit.WebView
-import android.webkit.WebViewClient
+import android.webkit.*
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
@@ -29,6 +29,27 @@ class URLActivity : AppCompatActivity() {
         webSettings.javaScriptEnabled = true
         web.webViewClient = WebViewClient()
         CookieManager.getInstance().setAcceptThirdPartyCookies(web, true);
+        web.setDownloadListener(DownloadListener { url, userAgent, contentDisposition, mimeType, contentLength ->
+            val request = DownloadManager.Request(
+                Uri.parse(url)
+            )
+            request.setMimeType(mimeType)
+            val cookies = CookieManager.getInstance().getCookie(url)
+            request.addRequestHeader("cookie", cookies)
+            request.addRequestHeader("User-Agent", userAgent)
+            request.setDescription("Downloading File...")
+            request.setTitle(URLUtil.guessFileName(url, contentDisposition, mimeType))
+            request.allowScanningByMediaScanner()
+            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+            request.setDestinationInExternalPublicDir(
+                Environment.DIRECTORY_DOWNLOADS, URLUtil.guessFileName(
+                    url, contentDisposition, mimeType
+                )
+            )
+            val dm = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
+            dm.enqueue(request)
+            Toast.makeText(applicationContext, "Downloading File", Toast.LENGTH_LONG).show()
+        })
 
         if(func.checkForInternet(this)){
 //            func.configureWebView(web)
@@ -45,7 +66,7 @@ class URLActivity : AppCompatActivity() {
         {
             val func = Func()
 
-            Prefs(applicationContext).setString("ActiveURL",web.url.toString())
+            Prefs(applicationContext).setString("ActiveURL", web.url.toString())
             func.onExitDialog(View(this))
         }
         else {
