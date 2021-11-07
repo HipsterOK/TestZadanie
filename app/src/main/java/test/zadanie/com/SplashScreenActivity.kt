@@ -17,15 +17,6 @@ import org.json.JSONTokener
 
 class SplashScreenActivity : AppCompatActivity() {
 
-    private val PermissionsRequestCode = 123
-    private lateinit var managePermissions: ManagePermissions
-
-    val list = listOf<String>(
-        Manifest.permission.INTERNET,
-        Manifest.permission.ACCESS_NETWORK_STATE,
-        Manifest.permission.READ_EXTERNAL_STORAGE
-    )
-
     private val SPLASH_TIME_OUT:Long = 3000// 1 sec
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,10 +53,10 @@ class SplashScreenActivity : AppCompatActivity() {
                                 Log.i("Url: ", url)
                                 pref.setString("URL", url)
                                 pref.setString("ActiveURL", url)
-                                pref.setBoolean("firstRun", false)
                             } catch (e: Exception) {
                                 Log.i("InterEx", e.toString())
                             }
+                            pref.setBoolean("firstRun", false)
                             pref.setBoolean("loginState", false)
                         }
 
